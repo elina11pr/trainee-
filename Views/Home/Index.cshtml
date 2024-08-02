@@ -1,8 +1,30 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "User Search";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Search User by Name</h1>
+<input type="text" id="userName" placeholder="Enter user name">
+<button onclick="searchUser()">Search</button>
+<div id="userInfo"></div>
+
+@section Scripts {
+    <script>
+        async function searchUser() {
+            const userName = document.getElementById('userName').value;
+            const response = await fetch(`/User/Search/${userName}`);
+            
+            if (response.ok) {
+                const user = await response.json();
+                document.getElementById('userInfo').innerHTML = `
+                    <p>Id: ${user.id}</p>
+                    <p>Name: ${user.name}</p>
+                    <p>Age: ${user.age}</p>
+                    <p>Email: ${user.email}</p>
+                    <p>City: ${user.city}</p>
+                `;
+            } else {
+                document.getElementById('userInfo').innerHTML = '<p>User not found</p>';
+            }
+        }
+    </script>
+}
